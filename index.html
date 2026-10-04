@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PYP Classroom Learning Helper</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Fredoka & Quicksand for a friendly, readable classroom typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pypBlue: '#2A9D8F',
+                        pypYellow: '#E9C46A',
+                        pypOrange: '#F4A261',
+                        pypRed: '#E76F51',
+                        pypPurple: '#8E44AD',
+                        pypBg: '#F8F9FA'
+                    },
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        quicksand: ['Quicksand', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #F3F4F6;
+        }
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Fredoka', sans-serif;
+        }
+        .card-hover {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+        .card-hover:active {
+            transform: translateY(-1px);
+        }
+        /* Custom scrollbar for clean aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F1F1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Top Navigation Header -->
+    <header class="bg-white border-b-4 border-pypBlue shadow-sm sticky top-0 z-30">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
+                <div class="bg-pypYellow text-slate-800 p-2.5 rounded-2xl shadow-inner font-bold text-2xl">
+                    ✏️
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-slate-800 leading-tight">PYP Writer's Toolbox</h1>
+                    <p class="text-xs text-slate-500 font-semibold">Primary Years Programme Learning Helper</p>
+                </div>
+            </div>
+            
+            <button onclick="toggleTeacherModal()" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs md:text-sm font-bold transition">
+                <span>⚙️</span>
+                <span class="hidden sm:inline">Teacher Data (JSON)</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-5xl mx-auto px-4 py-6 flex-grow w-full">
+        <!-- Dynamic Breadcrumb Navigation -->
+        <nav id="breadcrumb" class="mb-6 flex items-center flex-wrap gap-2 text-sm md:text-base font-semibold text-slate-600 bg-white p-3 rounded-2xl border border-slate-200 shadow-sm">
+            <!-- Populated by JavaScript -->
+        </nav>
+
+        <!-- Dynamic Page View Container -->
+        <div id="app-content">
+            <!-- Active view will render here via JS -->
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-4 mt-8">
+        <div class="max-w-5xl mx-auto px-4 text-center text-xs md:text-sm text-slate-500 font-medium">
+            <p>🌟 Designed for PYP Inquirers & Communicators | Modular Classroom Assistant</p>
+        </div>
+    </footer>
+
+    <!-- Teacher JSON Editor / Viewer Modal -->
+    <div id="teacher-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden border-4 border-pypBlue">
+            <div class="p-4 bg-pypBlue text-white flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">⚙️</span>
+                    <h3 class="text-lg font-bold">Teacher Data Configuration (JSON)</h3>
+                </div>
+                <button onclick="toggleTeacherModal()" class="text-white hover:bg-white/20 rounded-full w-8 h-8 flex items-center justify-center text-xl font-bold">✕</button>
+            </div>
+            <div class="p-4 overflow-y-auto flex-grow bg-slate-50">
+                <p class="text-xs text-slate-600 mb-3">
+                    This JSON structure drives all the content on this website. As a teacher, you can copy this code, edit it, or expand it over time to add Unit 3, Pathos, Logos, or additional starters.
+                </p>
+                <pre id="json-display" class="bg-slate-900 text-emerald-400 p-4 rounded-2xl text-xs font-mono overflow-x-auto leading-relaxed border border-slate-700"></pre>
+            </div>
+            <div class="p-4 bg-white border-t border-slate-200 flex justify-between items-center">
+                <button onclick="copyJSON()" id="copy-btn" class="bg-pypBlue hover:bg-teal-600 text-white font-bold px-4 py-2 rounded-xl text-sm transition">
+                    📋 Copy JSON
+                </button>
+                <button onclick="toggleTeacherModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-xl text-sm transition">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           PYP LEARNING HELPER DATA STRUCTURE (JSON)
+           Easily editable to expand to other units, tools, and sentence starters.
+           ========================================================================== */
+        const pypData = {
+            units: [
+                {
+                    id: "unit-2",
+                    title: "Unit 2: How We Express Ourselves",
+                    subtitle: "Persuasion, Media, and Communication",
+                    icon: "📢",
+                    badge: "Active Unit",
+                    active: true,
+                    description: "Explore how we express ideas, persuade others, and present strong evidence.",
+                    tools: [
+                        {
+                            id: "persuasive-text-helper",
+                            title: "Persuasive Text Helper",
+                            subtitle: "Build strong persuasive arguments step-by-step",
+                            icon: "✍️",
+                            active: true,
+                            strategies: [
+                                { id: "opening-statement", title: "Opening Statement", icon: "🚀", active: false },
+                                { 
+                                    id: "ethos", 
+                                    title: "Ethos (Trust & Credibility)", 
+                                    icon: "🤝", 
+                                    active: true,
+                                    explanation: "Ethos shows your reader that you are trustworthy, experienced, and knowledgeable about your topic!",
+                                    starters: [
+                                        {
+                                            starter: "You can trust me when I say ......",
+                                            examples: [
+                                                "You can trust me when I say this is the tastiest ice cream in town.",
+                                                "You can trust me when I say these stickers stick perfectly without ripping.",
+                                                "You can trust me when I say my popcorn is the best in town."
+                                            ]
+                                        },
+                                        {
+                                            starter: "I have been ......",
+                                            examples: [
+                                                "I have been collecting and designing colorful stickers for years.",
+                                                "I have been practicing making ice cream for a long time.",
+                                                "I have been baking delicious cookies with my grandmother since I was five."
+                                            ]
+                                        },
+                                        {
+                                            starter: "I have worked hard ......",
+                                            examples: [
+                                                "I have worked hard in the kitchen choosing only fresh ingredients to make every scoop.",
+                                                "I have worked hard to test this is the most fun game for everyone.",
+                                                "I have worked hard making sure my nachos are perfectly crispy."
+                                            ]
+                                        },
+                                        {
+                                            starter: "You can believe me when I say ......",
+                                            examples: [
+                                                "You can believe me when I say these homemade treats are made with real care.",
+                                                "You can believe me when I say these stickers are top quality.",
+                                                "You can believe me when I say you will love my nachos."
+                                            ]
+                                        },
+                                        {
+                                            starter: "I promise ......",
+                                            examples: [
+                                                "I promise you can believe in the quality of my fresh ice cream.",
+                                                "I promise that you will want more of my ice cream.",
+                                                "I promise these toys are safe and easy for everyone to use."
+                                            ]
+                                        }
+                                    ]
+                                },
+                                { id: "pathos", title: "Pathos (Emotions & Feelings)", icon: "❤️", active: false },
+                                { id: "logos", title: "Logos (Facts & Logic)", icon: "🧠", active: false },
+                                { id: "call-to-action", title: "Call to Action", icon: "📣", active: false }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    id: "unit-1",
+                    title: "Unit 1: Who We Are",
+                    subtitle: "Beliefs, Values & Health",
+                    icon: "🌱",
+                    badge: "Completed",
+                    active: false,
+                    tools: []
+                },
+                {
+                    id: "unit-3",
+                    title: "Unit 3: Where We Are in Place and Time",
+                    subtitle: "Exploration & History",
+                    icon: "🌍",
+                    badge: "Coming Soon",
+                    active: false,
+                    tools: []
+                }
+            ]
+        };
+
+        // Application Navigation State
+        let currentState = {
+            view: 'home', // 'home' | 'unit' | 'tool' | 'strategy'
+            unitId: null,
+            toolId: null,
+            strategyId: null
+        };
+
+        // Track active example index for each sentence starter to allow cycling
+        // Format: { "starter_index": example_index }
+        let exampleIndexes = {};
+
+        // DOM Elements
+        const appContent = document.getElementById('app-content');
+        const breadcrumbNav = document.getElementById('breadcrumb');
+
+        // On Page Load Initialize View
+        window.onload = function() {
+            renderView();
+            document.getElementById('json-display').textContent = JSON.stringify(pypData, null, 2);
+        };
+
+        function navigateTo(view, params = {}) {
+            currentState.view = view;
+            if (params.unitId !== undefined) currentState.unitId = params.unitId;
+            if (params.toolId !== undefined) currentState.toolId = params.toolId;
+            if (params.strategyId !== undefined) currentState.strategyId = params.strategyId;
+
+            // Scroll gently back to top on view change
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            renderView();
+        }
+
+        function renderBreadcrumbs() {
+            let crumbs = [
+                { label: "🏠 Home", action: () => navigateTo('home') }
+            ];
+
+            const currentUnit = pypData.units.find(u => u.id === currentState.unitId);
+            if (currentUnit && (currentState.view === 'unit' || currentState.view === 'tool' || currentState.view === 'strategy')) {
+                crumbs.push({ 
+                    label: currentUnit.title.split(':')[0], 
+                    action: () => navigateTo('unit', { unitId: currentUnit.id }) 
+                });
+            }
+
+            if (currentUnit) {
+                const currentTool = currentUnit.tools.find(t => t.id === currentState.toolId);
+                if (currentTool && (currentState.view === 'tool' || currentState.view === 'strategy')) {
+                    crumbs.push({ 
+                        label: currentTool.title, 
+                        action: () => navigateTo('tool', { toolId: currentTool.id }) 
+                    });
+                }
+
+                if (currentTool && currentState.view === 'strategy') {
+                    const currentStrategy = currentTool.strategies.find(s => s.id === currentState.strategyId);
+                    if (currentStrategy) {
+                        crumbs.push({ 
+                            label: currentStrategy.title.split(' ')[0], 
+                            action: null 
+                        });
+                    }
+                }
+            }
+
+            breadcrumbNav.innerHTML = crumbs.map((crumb, idx) => {
+                const isLast = idx === crumbs.length - 1;
+                if (isLast) {
+                    return `<span class="text-pypBlue font-bold">${crumb.label}</span>`;
+                } else {
+                    return `<button onclick="crumbClick(${idx})" class="hover:text-pypBlue hover:underline transition">${crumb.label}</button>
+                            <span class="text-slate-300">/</span>`;
+                }
+            }).join('');
+
+            // Store actions globally for easy crumb click mapping
+            window.crumbActions = crumbs.map(c => c.action);
+        }
+
+        function crumbClick(index) {
+            if (window.crumbActions && window.crumbActions[index]) {
+                window.crumbActions[index]();
+            }
+        }
+
+        function renderView() {
+            renderBreadcrumbs();
+
+            switch (currentState.view) {
+                case 'home':
+                    renderHomeView();
+                    break;
+                case 'unit':
+                    renderUnitView();
+                    break;
+                case 'tool':
+                    renderToolView();
+                    break;
+                case 'strategy':
+                    renderStrategyView();
+                    break;
+                default:
+                    renderHomeView();
+            }
+        }
+
+        // 1. HOME VIEW
+        function renderHomeView() {
+            let html = `
+                <div class="mb-8 bg-gradient-to-r from-pypBlue to-teal-600 text-white p-6 md:p-8 rounded-3xl shadow-lg relative overflow-hidden">
+                    <div class="relative z-10 max-w-2xl">
+                        <span class="bg-white/20 text-white font-bold text-xs uppercase px-3 py-1 rounded-full tracking-wider mb-3 inline-block">Welcome Students!</span>
+                        <h2 class="text-2xl md:text-4xl font-bold mb-2">What are you inquiring about today?</h2>
+                        <p class="text-teal-50 text-sm md:text-base font-medium">Select your current PYP Unit of Inquiry below to explore helpers, sentence starters, and writing tools.</p>
+                    </div>
+                    <div class="absolute -right-6 -bottom-6 text-8xl opacity-20 select-none">💡</div>
+                </div>
+
+                <h3 class="text-xl font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <span>📚</span> Units of Inquiry
+                </h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            `;
+
+            pypData.units.forEach(unit => {
+                if (unit.active) {
+                    html += `
+                        <div onclick="navigateTo('unit', { unitId: '${unit.id}' })" 
+                             class="card-hover bg-white border-2 border-pypBlue p-6 rounded-3xl shadow-sm cursor-pointer flex flex-col justify-between relative group">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="text-4xl p-2 bg-teal-50 rounded-2xl">${unit.icon}</span>
+                                    <span class="bg-emerald-100 text-emerald-800 font-bold text-xs px-3 py-1 rounded-full">${unit.badge}</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-slate-800 mb-1 group-hover:text-pypBlue transition">${unit.title}</h4>
+                                <p class="text-xs font-semibold text-slate-500 mb-3">${unit.subtitle}</p>
+                                <p class="text-sm text-slate-600 leading-relaxed">${unit.description}</p>
+                            </div>
+                            <div class="mt-6 flex items-center text-pypBlue font-bold text-sm">
+                                <span>Open Unit</span>
+                                <span class="ml-2 group-hover:translate-x-1 transition-transform">➔</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="bg-slate-100 border-2 border-dashed border-slate-300 p-6 rounded-3xl opacity-75 flex flex-col justify-between relative">
+                            <div>
+                                <div class="flex justify-between items-start mb-4">
+                                    <span class="text-4xl p-2 bg-slate-200 rounded-2xl opacity-60">${unit.icon}</span>
+                                    <span class="bg-slate-200 text-slate-600 font-bold text-xs px-3 py-1 rounded-full">${unit.badge}</span>
+                                </div>
+                                <h4 class="text-lg font-bold text-slate-600 mb-1">${unit.title}</h4>
+                                <p class="text-xs font-semibold text-slate-400 mb-3">${unit.subtitle}</p>
+                                <p class="text-xs text-slate-500 italic">This unit will unlock later in the school year!</p>
+                            </div>
+                            <div class="mt-6 text-xs text-slate-400 font-bold">🔒 Locked</div>
+                        </div>
+                    `;
+                }
+            });
+
+            html += `</div>`;
+            appContent.innerHTML = html;
+        }
+
+        // 2. UNIT VIEW
+        function renderUnitView() {
+            const unit = pypData.units.find(u => u.id === currentState.unitId);
+            if (!unit) return renderHomeView();
+
+            let html = `
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-pypBlue uppercase tracking-wider">Unit Tools</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${unit.title}</h2>
+                    </div>
+                    <button onclick="navigateTo('home')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
+                        ← Back to Units
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            `;
+
+            unit.tools.forEach(tool => {
+                if (tool.active) {
+                    html += `
+                        <div onclick="navigateTo('tool', { toolId: '${tool.id}' })" 
+                             class="card-hover bg-white border-2 border-pypYellow p-6 rounded-3xl shadow-sm cursor-pointer flex items-start gap-4 group">
+                            <span class="text-5xl p-3 bg-amber-50 rounded-2xl">${tool.icon}</span>
+                            <div>
+                                <span class="bg-amber-100 text-amber-800 font-bold text-xs px-2.5 py-0.5 rounded-full mb-2 inline-block">Interactive Tool</span>
+                                <h3 class="text-xl font-bold text-slate-800 group-hover:text-pypOrange transition">${tool.title}</h3>
+                                <p class="text-xs text-slate-500 mt-1 mb-3">${tool.subtitle}</p>
+                                <span class="text-xs text-pypOrange font-bold flex items-center gap-1">
+                                    Click to launch helper <span class="group-hover:translate-x-1 transition-transform">➔</span>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            html += `</div>`;
+            appContent.innerHTML = html;
+        }
+
+        // 3. TOOL VIEW (Persuasive Text Helper)
+        function renderToolView() {
+            const unit = pypData.units.find(u => u.id === currentState.unitId);
+            const tool = unit?.tools.find(t => t.id === currentState.toolId);
+            if (!tool) return renderHomeView();
+
+            let html = `
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <span class="text-xs font-bold text-pypOrange uppercase tracking-wider">${unit.title}</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${tool.title}</h2>
+                        <p class="text-xs md:text-sm text-slate-500 font-medium">Choose a part of your persuasive text to practice!</p>
+                    </div>
+                    <button onclick="navigateTo('unit')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
+                        ← Back
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            `;
+
+            tool.strategies.forEach(strat => {
+                if (strat.active) {
+                    html += `
+                        <div onclick="navigateTo('strategy', { strategyId: '${strat.id}' })"
+                             class="card-hover bg-gradient-to-br from-white to-teal-50/50 border-2 border-pypBlue p-5 rounded-3xl shadow-sm cursor-pointer flex flex-col justify-between group">
+                            <div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-3xl p-2 bg-white rounded-2xl shadow-sm border border-slate-100">${strat.icon}</span>
+                                    <span class="bg-pypBlue text-white font-bold text-xs px-2.5 py-1 rounded-full">Active</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-800 group-hover:text-pypBlue transition">${strat.title}</h3>
+                                <p class="text-xs text-slate-500 mt-1">Explore sentence starters & example sentences.</p>
+                            </div>
+                            <div class="mt-5 text-pypBlue font-bold text-xs flex items-center gap-1">
+                                Open Starters <span class="group-hover:translate-x-1 transition-transform">➔</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="bg-slate-100 border-2 border-dashed border-slate-300 p-5 rounded-3xl opacity-70 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-3xl p-2 bg-slate-200 rounded-2xl opacity-60">${strat.icon}</span>
+                                    <span class="bg-slate-200 text-slate-500 font-bold text-xs px-2.5 py-1 rounded-full">Coming Soon</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-600">${strat.title}</h3>
+                                <p class="text-xs text-slate-400 mt-1">This section will be available soon!</p>
+                            </div>
+                            <div class="mt-5 text-xs text-slate-400 font-bold">🔒 Placeholder</div>
+                        </div>
+                    `;
+                }
+            });
+
+            html += `</div>`;
+            appContent.innerHTML = html;
+        }
+
+        // 4. STRATEGY VIEW (Ethos - Sentence Starters & Interactive Examples)
+        function renderStrategyView() {
+            const unit = pypData.units.find(u => u.id === currentState.unitId);
+            const tool = unit?.tools.find(t => t.id === currentState.toolId);
+            const strategy = tool?.strategies.find(s => s.id === currentState.strategyId);
+
+            if (!strategy) return renderHomeView();
+
+            let html = `
+                <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-2xl">${strategy.icon}</span>
+                            <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${strategy.title}</h2>
+                        </div>
+                        <p class="text-sm text-slate-600 bg-amber-50 border border-amber-200 p-3 rounded-2xl max-w-2xl font-medium">
+                            💡 <strong>Teacher Tip:</strong> ${strategy.explanation}
+                        </p>
+                    </div>
+                    <button onclick="navigateTo('tool')" class="self-start md:self-auto bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
+                        ← Back to Tool
+                    </button>
+                </div>
+
+                <h3 class="text-lg font-bold text-slate-800 mb-4 flex items-center gap-2">
+                    <span>💬</span> 5 Ethos Sentence Starters & Examples
+                </h3>
+
+                <div class="space-y-6">
+            `;
+
+            strategy.starters.forEach((item, index) => {
+                // Initialize example index tracking if not set
+                if (exampleIndexes[index] === undefined) {
+                    exampleIndexes[index] = 0;
+                }
+
+                const currentExampleIdx = exampleIndexes[index];
+                const currentExampleText = item.examples[currentExampleIdx];
+                const totalExamples = item.examples.length;
+
+                html += `
+                    <div class="bg-white border-2 border-slate-200 rounded-3xl p-5 md:p-6 shadow-sm hover:border-pypBlue transition">
+                        <div class="flex items-start justify-between gap-3 mb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="bg-pypPurple text-white font-bold w-8 h-8 rounded-xl flex items-center justify-center text-sm shadow-sm">
+                                    ${index + 1}
+                                </span>
+                                <h4 class="text-lg md:text-xl font-bold text-slate-800 font-heading">
+                                    "${item.starter}"
+                                </h4>
+                            </div>
+                        </div>
+
+                        <!-- Example Card Container -->
+                        <div class="mt-4 bg-purple-50/60 border border-purple-100 rounded-2xl p-4 md:p-5 relative">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-xs font-bold text-purple-700 uppercase tracking-wider flex items-center gap-1">
+                                    <span>🌟</span> Sample Full Sentence Example
+                                </span>
+                                <span class="text-xs font-bold text-purple-600 bg-purple-100 px-2.5 py-0.5 rounded-full">
+                                    Example ${currentExampleIdx + 1} of ${totalExamples}
+                                </span>
+                            </div>
+
+                            <!-- Display Full Example Sentence -->
+                            <p class="text-base md:text-lg text-slate-800 font-semibold leading-relaxed my-2">
+                                "${highlightStarter(currentExampleText, item.starter)}"
+                            </p>
+
+                            <!-- Cycle Button -->
+                            <div class="mt-4 flex justify-end">
+                                <button onclick="cycleExample(${index}, ${totalExamples})" 
+                                        class="bg-pypPurple hover:bg-purple-800 active:scale-95 text-white font-bold px-4 py-2 rounded-xl text-xs md:text-sm shadow transition flex items-center gap-2">
+                                    <span>Change Example 🎲</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`;
+            appContent.innerHTML = html;
+        }
+
+        // Cycle example sentence index
+        function cycleExample(starterIndex, maxCount) {
+            exampleIndexes[starterIndex] = (exampleIndexes[starterIndex] + 1) % maxCount;
+            renderStrategyView();
+        }
+
+        // Highlight starter words inside full sentence for visual clarity
+        function highlightStarter(fullSentence, starter) {
+            const cleanStarter = starter.replace(/\.\.\.\.\.\./g, '').trim();
+            if (fullSentence.toLowerCase().startsWith(cleanStarter.toLowerCase())) {
+                const starterPart = fullSentence.substring(0, cleanStarter.length);
+                const restPart = fullSentence.substring(cleanStarter.length);
+                return `<span class="text-pypPurple font-extrabold underline decoration-wavy decoration-purple-300">${starterPart}</span>${restPart}`;
+            }
+            return fullSentence;
+        }
+
+        function toggleTeacherModal() {
+            const modal = document.getElementById('teacher-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        function copyJSON() {
+            const textToCopy = JSON.stringify(pypData, null, 2);
+            
+            // Clipboard fallback as specified
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            
+            try {
+                document.execCommand('copy');
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = '✅ Copied!';
+                btn.classList.replace('bg-pypBlue', 'bg-emerald-600');
+                setTimeout(() => {
+                    btn.textContent = '📋 Copy JSON';
+                    btn.classList.replace('bg-emerald-600', 'bg-pypBlue');
+                }, 2000);
+            } catch (err) {
+                console.error('Copy failed', err);
+            }
+            document.body.removeChild(textarea);
+        }
+    </script>
+</body>
+</html>
