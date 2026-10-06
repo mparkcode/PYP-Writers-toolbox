@@ -76,6 +76,14 @@
               "explanation": "Logos uses logic, clear facts, and strong reasoning to prove to your reader why your idea makes complete sense!",
               "starters": [
                 {
+                  "starter": "My ...... contains ......",
+                  "examples": [
+                    "My juice contains 100% real fruit juice, no added refined sugar, and full daily vitamins.",
+                    "My nachos contains no artificial colorings, no strange preservatives, and real melted cheddar cheese.",
+                    "My squishies contains durable non-toxic silicone that easily restores its shape after thousands of squeezes."
+                  ]
+                },
+                {
                    "starter": "Studies show that ......",
                   "examples": [
                     "Studies show that fidget clickers help students maintain focus and lower stress during class.",
@@ -84,13 +92,12 @@
                   ]
                 },
                 {
-                  "starter": "It contains ......",
+                  "starter": "When we tested this product, we found that ......",
                   "examples": [
-                    "It contains 100% real fruit juice, no added refined sugar, and full daily vitamins.",
-                    "It contains no artificial colorings, no strange preservatives, and real melted cheddar cheese.",
-                    "It contains durable non-toxic silicone that easily restores its shape after thousands of squeezes."
+                    "When we tested this product, we found that our homemade cheese sauce stayed warm and extra melty for over thirty minutes.",
+                    "When we tested this product, we found that our fresh fruit juice gave students a natural energy boost without any sugar crashes.",
+                    "When we tested this product, we found that it clicked over 500 times without jamming or making loud noises during study time."
                   ]
-                 
                 },
                 {
                   "starter": "Doesn't it make sense to ........",
