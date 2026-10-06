@@ -76,20 +76,21 @@
               "explanation": "Logos uses logic, clear facts, and strong reasoning to prove to your reader why your idea makes complete sense!",
               "starters": [
                 {
+                   "starter": "Studies show that ......",
+                  "examples": [
+                    "Studies show that fidget clickers help students maintain focus and lower stress during class.",
+                    "Studies show that drinking fresh juice improves energy levels and helps kids stay active all day.",
+                    "Studies show that squishy toys provide calming sensory input that improves mood."
+                  ]
+                },
+                {
                   "starter": "It contains ......",
                   "examples": [
                     "It contains 100% real fruit juice, no added refined sugar, and full daily vitamins.",
                     "It contains no artificial colorings, no strange preservatives, and real melted cheddar cheese.",
                     "It contains durable non-toxic silicone that easily restores its shape after thousands of squeezes."
                   ]
-                },
-                {
-                  "starter": "Studies show that ......",
-                  "examples": [
-                    "Studies show that fidget clickers help students maintain focus and lower stress during class.",
-                    "Studies show that drinking fresh juice improves energy levels and helps kids stay active all day.",
-                    "Studies show that squishy toys provide calming sensory input that improves mood."
-                  ]
+                 
                 },
                 {
                   "starter": "Doesn't it make sense to ........",
