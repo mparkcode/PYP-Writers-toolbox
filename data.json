@@ -1,0 +1,136 @@
+{
+  "units": [
+    {
+      "id": "unit-2",
+      "title": "Unit 2: How We Express Ourselves",
+      "subtitle": "Persuasion, Media, and Communication",
+      "icon": "📢",
+      "badge": "Active Unit",
+      "active": true,
+      "description": "Explore how we express ideas, persuade others, and present strong evidence.",
+      "tools": [
+        {
+          "id": "persuasive-text-helper",
+          "title": "Persuasive Text Helper",
+          "subtitle": "Build strong persuasive arguments step-by-step",
+          "icon": "✍️",
+          "active": true,
+          "strategies": [
+            { "id": "opening-statement", "title": "Opening Statement", "icon": "🚀", "active": false },
+            { 
+              "id": "ethos", 
+              "title": "Ethos (Trust & Credibility)", 
+              "icon": "🤝", 
+              "active": true,
+              "explanation": "Ethos shows your reader that you are trustworthy, experienced, and knowledgeable about your topic!",
+              "starters": [
+                {
+                  "starter": "You can trust me when I say ......",
+                  "examples": [
+                    "You can trust me when I say this is the tastiest ice cream in town.",
+                    "You can trust me when I say these stickers stick perfectly without ripping.",
+                    "You can trust me when I say my popcorn is the best in town."
+                  ]
+                },
+                {
+                  "starter": "I have been ......",
+                  "examples": [
+                    "I have been collecting and designing colorful stickers for years.",
+                    "I have been practicing making ice cream for a long time.",
+                    "I have been baking delicious cookies with my grandmother since I was five."
+                  ]
+                },
+                {
+                  "starter": "I have worked hard ......",
+                  "examples": [
+                    "I have worked hard in the kitchen choosing only fresh ingredients to make every scoop.",
+                    "I have worked hard to test this is the most fun game for everyone.",
+                    "I have worked hard making sure my nachos are perfectly crispy."
+                  ]
+                },
+                {
+                  "starter": "You can believe me when I say ......",
+                  "examples": [
+                    "You can believe me when I say these homemade treats are made with real care.",
+                    "You can believe me when I say these stickers are top quality.",
+                    "You can believe me when I say you will love my nachos."
+                  ]
+                },
+                {
+                  "starter": "I promise ......",
+                  "examples": [
+                    "I promise you can believe in the quality of my fresh ice cream.",
+                    "I promise that you will want more of my ice cream.",
+                    "I promise these toys are safe and easy for everyone to use."
+                  ]
+                }
+              ]
+            },
+            { "id": "pathos", "title": "Pathos (Emotions & Feelings)", "icon": "❤️", "active": false },
+            { 
+              "id": "logos", 
+              "title": "Logos (Facts & Logic)", 
+              "icon": "🧠", 
+              "active": true,
+              "paragraphStarter": "Let's look at the facts.",
+              "explanation": "Logos uses logic, clear facts, and strong reasoning to prove to your reader why your idea makes complete sense!",
+              "starters": [
+                {
+                  "starter": "It contains ......",
+                  "examples": [
+                    "It contains 100% real fruit juice, no added refined sugar, and full daily vitamins.",
+                    "It contains no artificial colorings, no strange preservatives, and real melted cheddar cheese.",
+                    "It contains durable non-toxic silicone that easily restores its shape after thousands of squeezes."
+                  ]
+                },
+                {
+                  "starter": "Studies show that ......",
+                  "examples": [
+                    "Studies show that fidget clickers help students maintain focus and lower stress during class.",
+                    "Studies show that drinking fresh juice improves energy levels and helps kids stay active all day.",
+                    "Studies show that squishy toys provide calming sensory input that improves mood."
+                  ]
+                },
+                {
+                  "starter": "Doesn't it make sense to ........",
+                  "examples": [
+                    "Doesn't it make sense to choose a snack that is both crunchy and packed with real energy?",
+                    "Doesn't it make sense to buy a silent clicker that lasts all school year without breaking?",
+                    "Doesn't it make sense to pick a drink that tastes delicious and keeps your body healthy?"
+                  ]
+                },
+                {
+                  "starter": "It makes sense to .......",
+                  "examples": [
+                    "It makes sense to select squishies because they are affordable, reusable, and great for sharing.",
+                    "It makes sense to buy clickers because they are quiet, durable, and practical for learning.",
+                    "It makes sense to serve fresh nachos made with quality ingredients everyone enjoys."
+                  ]
+                }
+              ]
+            },
+            { "id": "call-to-action", "title": "Call to Action", "icon": "📣", "active": false }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unit-1",
+      "title": "Unit 1: Who We Are",
+      "subtitle": "Beliefs, Values & Health",
+      "icon": "🌱",
+      "badge": "Completed",
+      "active": false,
+      "tools": []
+    },
+    {
+      "id": "unit-3",
+      "title": "Unit 3: Where We Are in Place and Time",
+      "subtitle": "Exploration & History",
+      "icon": "🌍",
+      "badge": "Coming Soon",
+      "active": false,
+      "tools": []
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap');
+
+/* Custom Utility Classes matching Tailwind configuration */
+:root {
+  --pyp-blue: #2A9D8F;
+  --pyp-yellow: #E9C46A;
+  --pyp-orange: #F4A261;
+  --pyp-red: #E76F51;
+  --pyp-purple: #8E44AD;
+  --pyp-bg: #F8F9FA;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background-color: #F3F4F6;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: 'Fredoka', sans-serif;
+}
+
+.card-hover {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+}
+
+.card-hover:active {
+  transform: translateY(-1px);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F1F1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
