@@ -66,7 +66,39 @@
                 }
               ]
             },
-            { "id": "pathos", "title": "Pathos (Emotions & Feelings)", "icon": "❤️", "active": false },
+            { 
+              "id": "pathos", 
+              "title": "Pathos (Emotions & Feelings)", 
+              "icon": "❤️", 
+              "active": true,
+              "explanation": "Pathos connects with your reader's feelings, like happiness, excitement, relief, or delight, to make them care about your product!",
+              "starters": [
+                {
+                  "starter": "Imagine ......",
+                  "examples": [
+                    "Imagine taking a big gulp of ice-cold fruit juice on a hot sunny day and feeling instantly refreshed.",
+                    "Imagine walking into movie night and smelling warm, buttery popcorn popped fresh just for you.",
+                    "Imagine sitting at your desk during a hard test and feeling instantly calm as you click your silent clicker."
+                  ]
+                },
+                {
+                  "starter": "Picture .........",
+                  "examples": [
+                    "Picture your friends looking at your colorful juice box and wishing they had a sweet, fruity treat too.",
+                    "Picture your family sharing a giant bowl of crunchy popcorn while watching your favorite movie together.",
+                    "Picture sitting calmly in class, relaxing while your fidget clicker keeps your hands busy and your mind focused."
+                  ]
+                },
+                {
+                  "starter": "Doesn't that feeling .......",
+                  "examples": [
+                    "Doesn't that feeling of cold, sweet juice on your tongue make you smile instantly?",
+                    "Doesn't that feeling of warm, salty butter and crunch bring total happiness with every handful?",
+                    "Doesn't that feeling of relief and focus make studying feel so much easier and less stressful?"
+                  ]
+                }
+              ]
+            },
             { 
               "id": "logos", 
               "title": "Logos (Facts & Logic)", 
@@ -84,7 +116,7 @@
                   ]
                 },
                 {
-                   "starter": "Studies show that ......",
+                  "starter": "Studies show that ......",
                   "examples": [
                     "Studies show that fidget clickers help students maintain focus and lower stress during class.",
                     "Studies show that drinking fresh juice improves energy levels and helps kids stay active all day.",
@@ -118,6 +150,46 @@
               ]
             },
             { "id": "call-to-action", "title": "Call to Action", "icon": "📣", "active": false }
+          ]
+        },
+        {
+          "id": "pathos-adverts",
+          "title": "Pathos One Line Advert Examples",
+          "subtitle": "Short emotional slogans that catch your reader's attention instantly",
+          "icon": "💖",
+          "active": true,
+          "explanation": "Pathos connects with your audience's feelings, excitement, happiness, and desires in just one powerful sentence!",
+          "adverts": [
+            {
+              "product": "Fresh Fruit Juice 🧃",
+              "tagline": "Feel the burst of pure happiness in every ice-cold sip!",
+              "emotion": "Joy & Refreshment",
+              "image": "https://images.unsplash.com/photo-1621506289937-a8e4df240d0b?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "product": "Custom Squishies 🧸",
+              "tagline": "Squeeze away your stress and bring an instant smile to your day!",
+              "emotion": "Comfort & Calm",
+              "image": "https://images.unsplash.com/photo-1558060370-d644479cb6f7?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "product": "Crunchy Nachos 🧀",
+              "tagline": "Treat your taste buds to the ultimate crunchy bite of pure joy!",
+              "emotion": "Excitement & Craving",
+              "image": "https://images.unsplash.com/photo-1513456852971-30c0b8199d4d?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "product": "Fidget Clickers 🎯",
+              "tagline": "Turn quiet study time into a relaxing, focus-boosting adventure!",
+              "emotion": "Focus & Confidence",
+              "image": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80"
+            },
+            {
+              "product": "Cool Backpack Stickers 🎨",
+              "tagline": "Show the world your unique style with designs that make you shine!",
+              "emotion": "Pride & Self-Expression",
+              "image": "https://images.unsplash.com/photo-1572375992501-4b0892d50c69?auto=format&fit=crop&w=800&q=80"
+            }
           ]
         }
       ]

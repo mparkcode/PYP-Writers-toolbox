@@ -9,7 +9,7 @@ let currentState = {
     strategyId: null
 };
 
-// Track active example index for each sentence starter to allow cycling
+// Track active example index for each sentence starter / advert to allow cycling
 let exampleIndexes = {};
 
 // DOM Elements
@@ -66,7 +66,7 @@ function renderBreadcrumbs() {
         }
 
         if (currentTool && currentState.view === 'strategy') {
-            const currentStrategy = currentTool.strategies.find(s => s.id === currentState.strategyId);
+            const currentStrategy = currentTool.strategies?.find(s => s.id === currentState.strategyId);
             if (currentStrategy) {
                 crumbs.push({ 
                     label: currentStrategy.title.split(' ')[0], 
@@ -225,65 +225,145 @@ function renderToolView() {
     const tool = unit?.tools.find(t => t.id === currentState.toolId);
     if (!tool) return renderHomeView();
 
-    let html = `
-        <div class="mb-6 flex items-center justify-between">
-            <div>
-                <span class="text-xs font-bold text-pypOrange uppercase tracking-wider">${unit.title}</span>
-                <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${tool.title}</h2>
-                <p class="text-xs md:text-sm text-slate-500 font-medium">Choose a part of your persuasive text to practice!</p>
+    // TOOL WITH STRATEGIES
+    if (tool.strategies) {
+        let html = `
+            <div class="mb-6 flex items-center justify-between">
+                <div>
+                    <span class="text-xs font-bold text-pypOrange uppercase tracking-wider">${unit.title}</span>
+                    <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${tool.title}</h2>
+                    <p class="text-xs md:text-sm text-slate-500 font-medium">Choose a part of your persuasive text to practice!</p>
+                </div>
+                <button onclick="navigateTo('unit')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
+                    ← Back
+                </button>
             </div>
-            <button onclick="navigateTo('unit')" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
-                ← Back
-            </button>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    `;
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        `;
 
-    tool.strategies.forEach(strat => {
-        if (strat.active) {
-            html += `
-                <div onclick="navigateTo('strategy', { strategyId: '${strat.id}' })"
-                     class="card-hover bg-gradient-to-br from-white to-teal-50/50 border-2 border-pypBlue p-5 rounded-3xl shadow-sm cursor-pointer flex flex-col justify-between group">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-3xl p-2 bg-white rounded-2xl shadow-sm border border-slate-100">${strat.icon}</span>
-                            <span class="bg-pypBlue text-white font-bold text-xs px-2.5 py-1 rounded-full">Active</span>
+        tool.strategies.forEach(strat => {
+            if (strat.active) {
+                html += `
+                    <div onclick="navigateTo('strategy', { strategyId: '${strat.id}' })"
+                         class="card-hover bg-gradient-to-br from-white to-teal-50/50 border-2 border-pypBlue p-5 rounded-3xl shadow-sm cursor-pointer flex flex-col justify-between group">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-3xl p-2 bg-white rounded-2xl shadow-sm border border-slate-100">${strat.icon}</span>
+                                <span class="bg-pypBlue text-white font-bold text-xs px-2.5 py-1 rounded-full">Active</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 group-hover:text-pypBlue transition">${strat.title}</h3>
+                            <p class="text-xs text-slate-500 mt-1">Explore sentence starters & example sentences.</p>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-800 group-hover:text-pypBlue transition">${strat.title}</h3>
-                        <p class="text-xs text-slate-500 mt-1">Explore sentence starters & example sentences.</p>
-                    </div>
-                    <div class="mt-5 text-pypBlue font-bold text-xs flex items-center gap-1">
-                        Open Starters <span class="group-hover:translate-x-1 transition-transform">➔</span>
-                    </div>
-                </div>
-            `;
-        } else {
-            html += `
-                <div class="bg-slate-100 border-2 border-dashed border-slate-300 p-5 rounded-3xl opacity-70 flex flex-col justify-between">
-                    <div>
-                        <div class="flex justify-between items-center mb-3">
-                            <span class="text-3xl p-2 bg-slate-200 rounded-2xl opacity-60">${strat.icon}</span>
-                            <span class="bg-slate-200 text-slate-500 font-bold text-xs px-2.5 py-1 rounded-full">Coming Soon</span>
+                        <div class="mt-5 text-pypBlue font-bold text-xs flex items-center gap-1">
+                            Open Starters <span class="group-hover:translate-x-1 transition-transform">➔</span>
                         </div>
-                        <h3 class="text-lg font-bold text-slate-600">${strat.title}</h3>
-                        <p class="text-xs text-slate-400 mt-1">This section will be available soon!</p>
                     </div>
-                    <div class="mt-5 text-xs text-slate-400 font-bold">🔒 Placeholder</div>
-                </div>
-            `;
+                `;
+            } else {
+                html += `
+                    <div class="bg-slate-100 border-2 border-dashed border-slate-300 p-5 rounded-3xl opacity-70 flex flex-col justify-between">
+                        <div>
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-3xl p-2 bg-slate-200 rounded-2xl opacity-60">${strat.icon}</span>
+                                <span class="bg-slate-200 text-slate-500 font-bold text-xs px-2.5 py-1 rounded-full">Coming Soon</span>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-600">${strat.title}</h3>
+                            <p class="text-xs text-slate-400 mt-1">This section will be available soon!</p>
+                        </div>
+                        <div class="mt-5 text-xs text-slate-400 font-bold">🔒 Placeholder</div>
+                    </div>
+                `;
+            }
+        });
+
+        html += `</div>`;
+        appContent.innerHTML = html;
+    } 
+    // TOOL WITH CYCLING VISUAL ADVERTS (Pathos One Line Adverts)
+    else if (tool.adverts) {
+        const adKey = `tool_ad_${tool.id}`;
+        if (exampleIndexes[adKey] === undefined) {
+            exampleIndexes[adKey] = 0;
         }
-    });
 
-    html += `</div>`;
-    appContent.innerHTML = html;
+        const currentAdIdx = exampleIndexes[adKey];
+        const currentAd = tool.adverts[currentAdIdx];
+        const totalAds = tool.adverts.length;
+
+        let html = `
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-2xl">${tool.icon}</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${tool.title}</h2>
+                    </div>
+                    <p class="text-sm text-slate-600 bg-amber-50 border border-amber-200 p-3 rounded-2xl max-w-2xl font-medium">
+                        💡 <strong>Teacher Tip:</strong> ${tool.explanation}
+                    </p>
+                </div>
+                <button onclick="navigateTo('unit')" class="self-start md:self-auto bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
+                    ← Back to Unit Tools
+                </button>
+            </div>
+
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                    <span>🖼️</span> Interactive Product Advert Preview
+                </h3>
+                <span class="text-xs font-bold text-pypRed bg-pink-100 px-3 py-1 rounded-full">
+                    Advert ${currentAdIdx + 1} of ${totalAds}
+                </span>
+            </div>
+
+            <!-- Single Large Advert Display Card -->
+            <div class="bg-white border-4 border-pypRed rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row max-w-4xl mx-auto">
+                <div class="md:w-1/2 h-64 md:h-auto relative overflow-hidden bg-slate-900">
+                    <img src="${currentAd.image}" alt="${currentAd.product}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
+                    <div class="absolute top-3 left-3 bg-pypRed text-white font-extrabold text-xs px-3 py-1 rounded-full shadow">
+                        ${currentAd.emotion}
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 p-6 md:p-8 flex flex-col justify-between bg-gradient-to-br from-white to-rose-50/40">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Featured Product</span>
+                        <h4 class="text-2xl md:text-3xl font-bold text-slate-800 font-heading mb-4">
+                            ${currentAd.product}
+                        </h4>
+
+                        <div class="bg-white border-2 border-rose-200 p-5 rounded-2xl shadow-inner my-2">
+                            <span class="text-xs font-bold text-pypRed uppercase tracking-wider mb-1 block">Catchy Pathos Slogan</span>
+                            <p class="text-lg md:text-xl font-bold text-slate-800 italic leading-relaxed">
+                                "${currentAd.tagline}"
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 flex justify-end">
+                        <button onclick="cycleAdverts('${adKey}', ${totalAds})" 
+                                class="bg-pypRed hover:bg-rose-700 active:scale-95 text-white font-bold px-6 py-3 rounded-2xl text-sm shadow-md transition flex items-center gap-2">
+                            <span>Next Advert 🎲</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        appContent.innerHTML = html;
+    }
+}
+
+function cycleAdverts(key, total) {
+    exampleIndexes[key] = (exampleIndexes[key] + 1) % total;
+    renderToolView();
 }
 
 // 4. STRATEGY VIEW
 function renderStrategyView() {
     const unit = pypData.units.find(u => u.id === currentState.unitId);
     const tool = unit?.tools.find(t => t.id === currentState.toolId);
-    const strategy = tool?.strategies.find(s => s.id === currentState.strategyId);
+    const strategy = tool?.strategies?.find(s => s.id === currentState.strategyId);
 
     if (!strategy) return renderHomeView();
 
@@ -304,7 +384,6 @@ function renderStrategyView() {
         </div>
     `;
 
-    // Special Paragraph Starter Callout Box (if defined for the strategy)
     if (strategy.paragraphStarter) {
         html += `
             <div class="mb-6 bg-gradient-to-r from-teal-500 to-pypBlue text-white p-5 md:p-6 rounded-3xl shadow-md flex items-start gap-4 border-2 border-teal-600">
@@ -329,7 +408,6 @@ function renderStrategyView() {
     `;
 
     strategy.starters.forEach((item, index) => {
-        // Dynamic key based on strategy and starter index to avoid state collisions
         const key = `${currentState.strategyId}_${index}`;
         if (exampleIndexes[key] === undefined) {
             exampleIndexes[key] = 0;
