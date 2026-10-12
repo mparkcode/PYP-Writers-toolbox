@@ -16,7 +16,40 @@
           "icon": "✍️",
           "active": true,
           "strategies": [
-            { "id": "opening-statement", "title": "Opening Statement", "icon": "🚀", "active": false },
+            {
+              "id": "catchy-title",
+              "title": "Catchy Title Generator",
+              "icon": "💡",
+              "active": true,
+              "type": "generator",
+              "explanation": "A catchy title grabs your reader's attention right away! Type your product below to generate exciting title ideas."
+            },
+            { 
+              "id": "opening-statement", 
+              "title": "Opening Statement", 
+              "icon": "🚀", 
+              "active": true,
+              "explanation": "Your opening statement grabs your reader's attention right away! Greet your audience and introduce your product as something extraordinary.",
+              "starters": [
+                {
+                  "starter": "Friends, classmates, and ............, let me tell you about ..............",
+                  "examples": [
+                    "Friends, classmates, and juice lovers, let me tell you about the most refreshing, delicious drink you will ever taste: Fresh Burst Juice!",
+                    "Friends, classmates, and movie lovers, let me tell you about the crunchiest, most flavorful snack in the whole school: Popcorn Crunch!",
+                    "Friends, classmates, and study warriors, let me tell you about the coolest, most helpful tool for your desk: Quiet Fidget Clickers!"
+                  ]
+                },
+                {
+                  "starter": "This is not just....... OR These are no ordinary .........",
+                  "examples": [
+                    "This is not just a drink—it is a bottle of pure fruity energy that will keep you going all day long!",
+                    "This is not just an ordinary box—it is a mystery box full of fun you will love putting your arms into!",
+                    "These are no ordinary snacks—they are freshly popped kernels made with real butter and sweet cinnamon!",
+                    "These are no ordinary toys—they are quiet focus boosters designed to keep your hands busy and your mind sharp during class!"
+                  ]
+                }
+              ]
+            },
             { 
               "id": "ethos", 
               "title": "Ethos (Trust & Credibility)", 
@@ -149,7 +182,23 @@
                 }
               ]
             },
-            { "id": "call-to-action", "title": "Call to Action", "icon": "📣", "active": false }
+            { 
+              "id": "call-to-action", 
+              "title": "Call to Action", 
+              "icon": "📣", 
+              "active": true,
+              "explanation": "Your call to action tells your reader exactly what step to take next before it's too late!",
+              "starters": [
+                {
+                  "starter": "So don't ........",
+                  "examples": [
+                    "So don't wait—treat yourself to a bottle of delicious, ice-cold fruit juice today!",
+                    "So don't delay—grab your bag of warm, freshly popped popcorn today!",
+                    "So don't wait—get your quiet fidget clicker today, and let the stress disappear!"
+                  ]
+                }
+              ]
+            }
           ]
         },
         {

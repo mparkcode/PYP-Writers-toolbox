@@ -246,17 +246,17 @@ function renderToolView() {
             if (strat.active) {
                 html += `
                     <div onclick="navigateTo('strategy', { strategyId: '${strat.id}' })"
-                         class="card-hover bg-gradient-to-br from-white to-teal-50/50 border-2 border-pypBlue p-5 rounded-3xl shadow-sm cursor-pointer flex flex-col justify-between group">
+                         class="card-hover bg-gradient-to-br from-white to-amber-50/50 border-2 border-pypYellow p-5 rounded-3xl shadow-sm cursor-pointer flex flex-col justify-between group">
                         <div>
                             <div class="flex justify-between items-center mb-3">
                                 <span class="text-3xl p-2 bg-white rounded-2xl shadow-sm border border-slate-100">${strat.icon}</span>
-                                <span class="bg-pypBlue text-white font-bold text-xs px-2.5 py-1 rounded-full">Active</span>
+                                <span class="bg-pypYellow text-slate-800 font-bold text-xs px-2.5 py-1 rounded-full">Active</span>
                             </div>
-                            <h3 class="text-lg font-bold text-slate-800 group-hover:text-pypBlue transition">${strat.title}</h3>
-                            <p class="text-xs text-slate-500 mt-1">Explore sentence starters & example sentences.</p>
+                            <h3 class="text-lg font-bold text-slate-800 group-hover:text-pypOrange transition">${strat.title}</h3>
+                            <p class="text-xs text-slate-500 mt-1">${strat.type === 'generator' ? 'Interactive title generator tool.' : 'Explore sentence starters & example sentences.'}</p>
                         </div>
-                        <div class="mt-5 text-pypBlue font-bold text-xs flex items-center gap-1">
-                            Open Starters <span class="group-hover:translate-x-1 transition-transform">➔</span>
+                        <div class="mt-5 text-pypOrange font-bold text-xs flex items-center gap-1">
+                            ${strat.type === 'generator' ? 'Launch Generator' : 'Open Starters'} <span class="group-hover:translate-x-1 transition-transform">➔</span>
                         </div>
                     </div>
                 `;
@@ -280,7 +280,7 @@ function renderToolView() {
         html += `</div>`;
         appContent.innerHTML = html;
     } 
-    // TOOL WITH CYCLING VISUAL ADVERTS (Pathos One Line Adverts)
+    // TOOL WITH CYCLING VISUAL ADVERTS
     else if (tool.adverts) {
         const adKey = `tool_ad_${tool.id}`;
         if (exampleIndexes[adKey] === undefined) {
@@ -316,7 +316,6 @@ function renderToolView() {
                 </span>
             </div>
 
-            <!-- Single Large Advert Display Card -->
             <div class="bg-white border-4 border-pypRed rounded-3xl shadow-lg overflow-hidden flex flex-col md:flex-row max-w-4xl mx-auto">
                 <div class="md:w-1/2 h-64 md:h-auto relative overflow-hidden bg-slate-900">
                     <img src="${currentAd.image}" alt="${currentAd.product}" class="w-full h-full object-cover transform hover:scale-105 transition duration-500">
@@ -367,6 +366,51 @@ function renderStrategyView() {
 
     if (!strategy) return renderHomeView();
 
+    // INTERACTIVE GENERATOR VIEW (Catchy Title Generator)
+    if (strategy.type === 'generator') {
+        let html = `
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-2xl">${strategy.icon}</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${strategy.title}</h2>
+                    </div>
+                    <p class="text-sm text-slate-600 bg-amber-50 border border-amber-200 p-3 rounded-2xl max-w-2xl font-medium">
+                        💡 <strong>Teacher Tip:</strong> ${strategy.explanation}
+                    </p>
+                </div>
+                <button onclick="navigateTo('tool')" class="self-start md:self-auto bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
+                    ← Back to Tool
+                </button>
+            </div>
+
+            <div class="bg-white border-4 border-pypYellow rounded-3xl p-6 md:p-8 shadow-md max-w-3xl mx-auto">
+                <label for="product-input" class="block text-slate-800 font-bold text-lg mb-2 font-heading">
+                    What product are you selling at the Entrepreneur Fair?
+                </label>
+                
+                <div class="flex flex-col sm:flex-row gap-3 mb-6">
+                    <input type="text" id="product-input" placeholder="e.g. ice-cream, stickers, pet rock, homework helper..." 
+                           class="flex-grow bg-slate-50 border-2 border-slate-300 focus:border-pypOrange rounded-2xl px-4 py-3 text-base md:text-lg font-semibold text-slate-800 outline-none transition">
+                    <button onclick="generateTitles()" 
+                            class="bg-pypOrange hover:bg-amber-600 active:scale-95 text-white font-bold px-6 py-3 rounded-2xl text-sm md:text-base shadow transition flex items-center justify-center gap-2">
+                        <span>Generate Titles 🪄</span>
+                    </button>
+                </div>
+
+                <div id="titles-output" class="hidden space-y-4 pt-4 border-t-2 border-slate-100">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-amber-800 flex items-center gap-2">
+                        <span>🌟</span> Suggested Catchy Titles:
+                    </h3>
+                    <div id="titles-list" class="space-y-3"></div>
+                </div>
+            </div>
+        `;
+        appContent.innerHTML = html;
+        return;
+    }
+
+    // STANDARD SENTENCE STARTER VIEW
     let html = `
         <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -457,6 +501,82 @@ function renderStrategyView() {
 
     html += `</div>`;
     appContent.innerHTML = html;
+}
+
+// Generate Catchy Titles Logic
+// Generate Catchy Titles Logic (Shuffled Selection)
+function generateTitles() {
+    const input = document.getElementById('product-input').value.trim();
+    if (!input) return;
+
+    const raw = input.toUpperCase();
+    
+    // Singularize plural inputs for natural phrasing
+    let singular = raw;
+    if (raw.endsWith('IES')) {
+        singular = raw.slice(0, -3) + 'Y';
+    } else if (raw.endsWith('S') && !raw.endsWith('SS')) {
+        singular = raw.slice(0, -1);
+    }
+
+    // Expanded Title Templates Pool (25 templates)
+    const titleTemplates = [
+        `HOMEMADE ${raw} THAT WILL CHANGE YOUR LIFE!`,
+        `TOO COOL NOT TO BUY: ${raw}!`,
+        `WHY YOU ABSOLUTELY NEED A ${singular}!`,
+        `HIRE / BUY A ${singular} TODAY!`,
+        `THE ULTIMATE ${raw} YOU'VE BEEN WAITING FOR!`,
+        `THE BEST ${raw} IN TOWN!`,
+        `SAY HELLO TO YOUR NEW FAVORITE: ${raw}!`,
+        `DON'T MISS OUT ON THE COOLEST ${raw}!`,
+        `BRIGHTEN YOUR DAY WITH FRESH ${raw}!`,
+        `THE NO. 1 REASON YOU NEED ${raw} TODAY!`,
+        `UPGRADE YOUR DAY WITH OUR AMAZING ${raw}!`,
+        `UNSTOPPABLE FUN: GET YOUR ${singular} NOW!`,
+        `THE SECRET TO BETTER CLASS DAYS? ${raw}!`,
+        `PREMIUM HANDMADE ${raw} MADE JUST FOR YOU!`,
+        `MEET THE ${singular} EVERYONE IS TALKING ABOUT!`,
+        `BE THE ENVY OF CLASS WITH ${raw}!`,
+        `TREAT YOURSELF TO THE BEST ${singular} AT THE FAIR!`,
+        `READY FOR REAL EXCITEMENT? TRY OUR ${raw}!`,
+        `YOUR DESK ISN'T COMPLETE WITHOUT A ${singular}!`,
+        `EXPERIENCE THE MAGIC OF ${raw}!`,
+        `SAY GOODBYE TO BORING DAYS WITH ${raw}!`,
+        `THE MOST DELICIOUS & FUN ${raw} EVER MADE!`,
+        `GRAB YOUR ${singular} BEFORE THEY'RE ALL GONE!`,
+        `HANDCRAFTED PERFECTION: ${raw}!`,
+        `THE MUST-HAVE ${singular} OF THE SCHOOL YEAR!`
+    ];
+
+    // Fisher-Yates Shuffle Algorithm to randomize templates
+    const shuffled = [...titleTemplates];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+
+    // Take the first 6 random items from the shuffled list
+    const selectedTitles = shuffled.slice(0, 6);
+
+    const listElem = document.getElementById('titles-list');
+    const outputElem = document.getElementById('titles-output');
+
+    listElem.innerHTML = selectedTitles.map(t => `
+        <div class="bg-amber-50 border-2 border-amber-200 text-slate-800 font-extrabold text-base md:text-lg p-4 rounded-2xl font-heading shadow-sm flex items-center justify-between gap-3">
+            <span>${t}</span>
+            <button onclick="copyTitle('${t.replace(/'/g, "\\'")}', this)" class="bg-pypOrange hover:bg-amber-600 text-white font-bold text-xs px-3 py-1.5 rounded-xl transition flex-shrink-0">
+                📋 Copy
+            </button>
+        </div>
+    `).join('');
+
+    outputElem.classList.remove('hidden');
+}
+
+function copyTitle(text, btn) {
+    navigator.clipboard.writeText(text);
+    btn.textContent = '✅ Copied!';
+    setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000);
 }
 
 function cycleExample(key, maxCount) {
