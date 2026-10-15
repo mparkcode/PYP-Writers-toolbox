@@ -240,6 +240,15 @@
               "image": "https://i.pinimg.com/736x/6d/65/09/6d6509a2b0b1156b54bf39c6ab8b4dd5.jpg"
             }
           ]
+        },
+        {
+          "id": "assessment-rubric",
+          "title": "Assessment Rubric",
+          "subtitle": "Check the success criteria for your persuasive writing project",
+          "icon": "📊",
+          "active": true,
+          "image": "images/unit2_rubric.png",
+          "explanation": "Use this rubric to guide your writing and verify your work before presenting at the Kid Entrepreneur Fair!"
         }
       ]
     },

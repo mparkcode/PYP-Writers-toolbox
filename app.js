@@ -193,7 +193,7 @@ function renderUnitView() {
             </button>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
     `;
 
     unit.tools.forEach(tool => {
@@ -351,6 +351,72 @@ function renderToolView() {
 
         appContent.innerHTML = html;
     }
+    // STANDALONE IMAGE REFERENCE TOOL (Assessment Rubric)
+    else if (tool.image) {
+        let html = `
+            <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-2xl">${tool.icon}</span>
+                        <h2 class="text-2xl md:text-3xl font-bold text-slate-800">${tool.title}</h2>
+                    </div>
+                    <p class="text-sm text-slate-600 bg-amber-50 border border-amber-200 p-3 rounded-2xl max-w-2xl font-medium">
+                        💡 <strong>Teacher Tip:</strong> ${tool.explanation}
+                    </p>
+                </div>
+                <button onclick="navigateTo('unit')" class="self-start md:self-auto bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-4 py-2 rounded-2xl text-sm transition">
+                    ← Back to Unit Tools
+                </button>
+            </div>
+
+            <div class="bg-white border-4 border-pypBlue rounded-3xl p-4 md:p-6 shadow-lg max-w-5xl mx-auto flex flex-col items-center">
+                <div class="w-full flex justify-between items-center mb-4">
+                    <span class="text-xs font-bold uppercase tracking-wider text-pypBlue bg-teal-50 px-3 py-1 rounded-full">
+                        📌 Student Success Criteria Reference
+                    </span>
+                    <button onclick="openRubricModal('${tool.image}')" class="bg-pypBlue hover:bg-teal-600 text-white font-bold text-xs md:text-sm px-4 py-2 rounded-xl transition flex items-center gap-1 shadow">
+                        🔍 View Fullsize
+                    </button>
+                </div>
+
+                <div class="w-full rounded-2xl overflow-hidden border-2 border-slate-200 bg-slate-100 shadow-inner group relative cursor-pointer" onclick="openRubricModal('${tool.image}')">
+                    <img src="${tool.image}" alt="${tool.title}" class="w-full h-auto object-contain max-h-[75vh] mx-auto transition duration-300 group-hover:scale-[1.01]" onerror="this.onerror=null; this.src='https://via.placeholder.com/1200x800?text=Place+unit2_rubric.png+in+images/+folder';">
+                    <div class="absolute inset-0 bg-slate-900/10 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                        <span class="bg-white/90 text-slate-800 font-bold text-sm px-4 py-2 rounded-xl shadow-lg">Click to Enlarge 🔍</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Expanded Extra-Large Rubric Modal -->
+            <div id="rubric-modal" class="fixed inset-0 bg-slate-900/85 backdrop-blur-md z-50 hidden flex items-center justify-center p-2 sm:p-4">
+                <div class="bg-white rounded-3xl w-[98vw] max-w-[98vw] h-[95vh] flex flex-col shadow-2xl overflow-hidden border-4 border-pypBlue relative">
+                    <div class="p-3 sm:p-4 bg-pypBlue text-white flex justify-between items-center flex-shrink-0">
+                        <h3 class="text-base sm:text-xl font-bold flex items-center gap-2">📊 Assessment Rubric Fullsize View</h3>
+                        <button onclick="closeRubricModal()" class="bg-white/20 hover:bg-white/30 text-white rounded-2xl px-4 py-1.5 text-sm sm:text-base font-extrabold transition">Close ✕</button>
+                    </div>
+                    <div class="p-2 sm:p-4 overflow-auto flex-grow bg-slate-900/5 flex items-center justify-center">
+                        <img id="rubric-modal-img" src="" alt="Rubric Fullsize" class="max-w-full max-h-full object-contain rounded-xl shadow-md">
+                    </div>
+                </div>
+            </div>
+        `;
+
+        appContent.innerHTML = html;
+    }
+}
+
+function openRubricModal(imgSrc) {
+    const modal = document.getElementById('rubric-modal');
+    const modalImg = document.getElementById('rubric-modal-img');
+    if (modal && modalImg) {
+        modalImg.src = imgSrc;
+        modal.classList.remove('hidden');
+    }
+}
+
+function closeRubricModal() {
+    const modal = document.getElementById('rubric-modal');
+    if (modal) modal.classList.add('hidden');
 }
 
 function cycleAdverts(key, total) {
@@ -503,7 +569,6 @@ function renderStrategyView() {
     appContent.innerHTML = html;
 }
 
-// Generate Catchy Titles Logic
 // Generate Catchy Titles Logic (Shuffled Selection)
 function generateTitles() {
     const input = document.getElementById('product-input').value.trim();
